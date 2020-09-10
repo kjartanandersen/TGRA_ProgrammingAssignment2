@@ -18,7 +18,6 @@ from BaseObjects import *
 from Projectile import *
 from EnemyObject import *
 from Player import *
-from Level import *
 
 
 # Class to hold onto game
@@ -42,12 +41,14 @@ class AsteroidGame:
         self.clock = None
         self.clock  = pygame.time.Clock()
         self.game_end = False
+        self.pressing_space = False
         self.enemyobjls = []
         self.enemyobjlslim = 5
-        self.enemies_amount = 5
+        self.enemies_amount = 1
         self.score = 0  
         self.projectiles = []
         self.projectile_speed = 200
+        
         
 
         # initialize the display
@@ -66,6 +67,9 @@ class AsteroidGame:
         # the delta time 
         delta_time = self.clock.tick() / 1000.0
         
+        if self.pressing_space and self.player.shooting:
+            self.projectiles.append(Projectile(Point(self.player.position.x , self.player.position.y), 
+                self.player.motion + Vector(-sin(self.player.angle * pi / 180.0), cos(self.player.angle * pi / 180.0)) * self.projectile_speed ))
         
 
         self.player.update(delta_time, self.win_x_size, self.win_y_size)
@@ -75,10 +79,16 @@ class AsteroidGame:
         for projectile in self.projectiles:
             for enemyobj in self.enemyobjls:
                 enemyobj.collide(projectile, delta_time)
-            projectile.update(delta_time, win_x_size, win_y_size)
+            self.player.shooting = False
+            
+            projectile.update(delta_time, self.win_x_size, self.win_y_size)
+
 
         for enemyobj in self.enemyobjls:
             enemyobj.update(delta_time, self.player.position)
+            if self.player.collide(enemyobj):
+                self.game_end = True
+
         
 
     # display the ship and the projectiles and objects
@@ -129,6 +139,7 @@ class AsteroidGame:
                      self.player.brake = True
                 elif event.key == K_SPACE:
                     self.player.shooting = True
+                    self.pressing_space = True
             elif event.type == pygame.KEYUP:
                 if event.key == K_LEFT:
                      self.player.going_left = False

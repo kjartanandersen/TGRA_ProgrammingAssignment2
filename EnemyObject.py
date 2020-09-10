@@ -93,9 +93,10 @@ class EnemyObject:
 
     # update enemy object
     def update(self, delta_time, player_position):
-        self.motion = Vector(player_position.x - self.position.x + random.randint(-5000, 5000), player_position.y - self.position.y + + random.randint(-5000, 5000))
+        
         # only update if object has either not been hit or has not exited the window frame
         if self.is_hit == False or self.oob == False:
+            self.motion = Vector(player_position.x - self.position.x + random.randint(-5000, 5000), player_position.y - self.position.y + + random.randint(-5000, 5000))
             self.position += self.motion * delta_time
 
 

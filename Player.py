@@ -30,7 +30,10 @@ class Player:
         self.is_hit = False
 
 
-   
+    def collide(self, enemby_obj):
+        if self.position.x <= enemby_obj.position.x and self.position.x >= enemby_obj.position.x - 37 and self.position.y <= enemby_obj.position.y and self.position.y >= enemby_obj.position.y - 37:
+            return True
+       
 
     def update(self, delta_time, win_x_size, win_y_size):
 
@@ -39,11 +42,11 @@ class Player:
     
         # is user presses space, shoot projectile
         if self.shooting:
+            pass
             # add projectile to projectile array
-            # self.projectiles.append(Projectile(Point(self.position.x , self.position.y), 
-            #     self.motion + Vector(-sin(self.angle * pi / 180.0), cos(self.angle * pi / 180.0)) * self.projectile_speed ))
+            
             # set so no more projectiles fire until user presses space again
-            self.shooting = False
+            
 
          # if user presses left
         if self.going_left:
